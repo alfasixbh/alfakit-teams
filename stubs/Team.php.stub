@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use AlfaSix\Alfakit\Contracts\HasAvatar;
+use AlfaSix\AlfakitTeams\Concerns\IsTeam;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * Register it with `TeamsPlugin::make()->teamModel(Team::class)`.
+ */
+class Team extends Model implements HasAvatar
+{
+    use IsTeam;
+
+    protected $fillable = ['name', 'slug', 'logo_path', 'personal_team', 'auto_join_domain'];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return ['personal_team' => 'boolean'];
+    }
+}

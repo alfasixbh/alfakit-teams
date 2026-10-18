@@ -1,0 +1,7 @@
+# Changelog
+
+All notable changes to `alfasix/alfakit-teams` are documented in this file.
+
+## Unreleased
+
+- Initial release: `TeamsPlugin` configures the panel's tenancy around a `Team` model (bundled, publishable stub, or your own with `IsTeam`), with a publishable migration (`teams`, `team_user` with a role, `team_invitations`, `users.current_team_id`) and `HasTeams` for the user (`HasTenants` + `HasDefaultTenant`, `hasTeamPermission()`, `teamRole()`, `ownsTeam()`, `switchTeam()`). Pages: Create team (tenant registration), Team settings (tenant profile: name, slug, logo, auto-join domain, leave, transfer ownership, delete with typed confirmation), Members (change role, remove, leave), Invitations (invite, resend, revoke) and a signed accept page that sends guests to sign in or register. Configurable `Role`s with permissions and wildcards, an overridable `TeamPolicy`, owner-only rules and last-owner protection, personal teams, invitation expiry and limits, domain auto-join (verified addresses, own domain only, public providers blocked), seat limits, `seatsFromBilling()` / `syncSeatsWithBilling()` hooks for the billing plugin and Shield role mirroring (both optional), `TeamManager` for your own code, and `TeamCreated`, `TeamDeleted`, `MemberAdded`, `MemberRemoved`, `MemberRoleUpdated`, `OwnershipTransferred`, `InvitationSent` and `InvitationAccepted` events. Translated into the 13 AlfaKit locales.

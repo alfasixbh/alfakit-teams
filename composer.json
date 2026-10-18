@@ -1,0 +1,91 @@
+{
+  "name": "alfasix/alfakit-teams",
+  "description": "Jetstream-style teams for AlfaKit panels on top of multi-tenancy: team creation and settings, personal teams, members with configurable roles and permissions, email invitations, domain auto-join, seat limits and an optional billing seat hook.",
+  "keywords": [
+    "laravel",
+    "alfakit",
+    "teams",
+    "saas",
+    "multi-tenancy",
+    "invitations",
+    "roles"
+  ],
+  "homepage": "https://alfakit.dev/docs/plugins/teams",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alfa Six",
+      "homepage": "https://alfasixbh.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/alfasixbh/alfakit/issues",
+    "source": "https://github.com/alfasixbh/alfakit"
+  },
+  "require": {
+    "php": "^8.3",
+    "alfasix/alfakit": "^0.1|@dev"
+  },
+  "suggest": {
+    "alfasix/alfakit-billing": "Per-team subscriptions: derive seats from the plan and sync the subscription quantity.",
+    "alfasix/alfakit-shield": "Mirror team roles to spatie/laravel-permission roles scoped to the team."
+  },
+  "autoload": {
+    "psr-4": {
+      "AlfaSix\\AlfakitTeams\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AlfaSix\\AlfakitTeams\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "AlfaSix\\AlfakitTeams\\AlfakitTeamsServiceProvider"
+      ]
+    },
+    "alfakit": {
+      "version": "^0.1",
+      "frontend": null,
+      "showcase": {
+        "demoPath": "staff",
+        "tour": [
+          "Open Settings > Staff",
+          "Invite a member with a role",
+          "Switch to another team"
+        ],
+        "clips": [
+          "react-light",
+          "react-dark",
+          "vue-light",
+          "vue-dark",
+          "svelte-light",
+          "svelte-dark"
+        ],
+        "worksWith": [
+          "billing",
+          "shield",
+          "feature-flags"
+        ],
+        "highlights": [
+          "Team creation and settings",
+          "Personal teams",
+          "Members with configurable roles and permissions",
+          "Email invitations",
+          "Domain auto-join",
+          "Seat limits",
+          "Optional billing seat hook"
+        ]
+      }
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
