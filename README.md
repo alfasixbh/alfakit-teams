@@ -1,6 +1,8 @@
 # AlfaKit Teams
 
-<p><picture><source media="(prefers-color-scheme: dark)" srcset="../../../art/alfasix/alfa-six-micro-white.svg"><img src="../../../art/alfasix/alfa-six-micro-navy.svg" alt="" width="24" height="18" align="top"></picture> <sub>by <a href="https://alfasixbh.com">Alfa Six</a></sub></p>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/alfasixbh/alfakit/main/art/alfasix/alfa-six-micro-white.svg"><img src="https://raw.githubusercontent.com/alfasixbh/alfakit/main/art/alfasix/alfa-six-micro-navy.svg" alt="" width="24" height="18" align="top"></picture> <sub>by <a href="https://alfasixbh.com">Alfa Six</a></sub></p>
+
+> This is a read-only split of the [AlfaKit monorepo](https://github.com/alfasixbh/alfakit/tree/main/packages/plugins/teams). Please open issues and pull requests there.
 
 Jetstream-style teams for [AlfaKit](https://alfakit.dev) panels, built on AlfaKit's multi-tenancy: create team and team settings pages, personal teams, members with configurable roles and permissions, e-mail invitations with signed links, domain auto-join, seat limits and an optional seat hook for the AlfaKit billing plugin. It renders in React, Vue and Svelte with AlfaKit's built-in components.
 
