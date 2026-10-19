@@ -78,6 +78,24 @@ describe('sending', function (): void {
         expect(new TeamInvitationNotification($invitation, 'x'))->toBeInstanceOf(Illuminate\Contracts\Queue\ShouldQueue::class);
     });
 
+    it('invites in apps that use immutable dates (the starter kits)', function (): void {
+        Illuminate\Support\Facades\Date::use(Carbon\CarbonImmutable::class);
+
+        try {
+            $ada = user('Ada');
+            $team = team($ada, 'Alpha');
+            actingAs($ada);
+
+            page(TeamMembers::class, $team)
+                ->callAction('invite', ['email' => 'grace@example.com', 'role' => 'member'])
+                ->assertHasNoActionErrors();
+
+            expect(TeamInvitation::query()->sole()->expires_at?->isSameDay(now()->addDays(7)))->toBeTrue();
+        } finally {
+            Illuminate\Support\Facades\Date::useDefault();
+        }
+    });
+
     it('rejects members, pending invitations and unknown roles', function (): void {
         $ada = user('Ada');
         $mia = user('Mia', 'mia@example.com');

@@ -585,7 +585,7 @@ class TeamManager
         Notification::route('mail', $invitation->email)->notify($notification);
     }
 
-    protected function expiresAt(): ?\Illuminate\Support\Carbon
+    protected function expiresAt(): ?\Carbon\CarbonInterface
     {
         $days = $this->plugin()->getInvitationExpiryDays();
 
