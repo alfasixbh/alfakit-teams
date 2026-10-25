@@ -196,6 +196,34 @@ describe('accepting', function (): void {
         Event::assertDispatched(InvitationAccepted::class, fn (InvitationAccepted $event): bool => $event->user->is($grace) && $event->team->is($team));
     });
 
+    it('accepts from the buttons as the renderers post them (field:infolist::{key})', function (): void {
+        $ada = user('Ada');
+        $team = team($ada, 'Alpha');
+        $grace = user('Grace', 'grace@example.com');
+        $invitation = Teams::manager()->invite($team, $ada, 'grace@example.com', 'member');
+
+        actingAs($grace);
+
+        $tester = PageTester::make(acceptPath($invitation))->assertOk();
+        $actions = collect((array) ($tester->getContentBlock('content')['components'] ?? []))
+            ->first(fn (mixed $component): bool => is_array($component) && ($component['type'] ?? null) === 'Actions');
+
+        expect($actions)->toBeArray();
+
+        // The Actions component runs its buttons as field actions; outside a form the
+        // renderers name the schema `infolist` (packages/core fieldActionContext()).
+        $response = \Pest\Laravel\postJson('/teams/_alfakit/actions', [
+            'token' => $tester->getToken(),
+            'component' => 'field:infolist::'.$actions['key'],
+            'action' => 'accept',
+        ]);
+
+        $response->assertOk()->assertJsonPath('redirect', 'http://localhost/teams/alpha/team/members');
+
+        expect($grace->teamRole($team)?->getName())->toBe('member')
+            ->and($invitation->fresh())->toBeNull();
+    });
+
     it('sends new addresses to the registration page and joins after registering', function (): void {
         $ada = user('Ada');
         $team = team($ada, 'Alpha');

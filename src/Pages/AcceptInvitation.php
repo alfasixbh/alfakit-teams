@@ -100,6 +100,21 @@ class AcceptInvitation extends Page
             : (string) __('alfakit-teams::teams.accept.description', ['team' => $this->getTeamName(), 'role' => $role]);
     }
 
+    /**
+     * The accept and decline buttons are an `Actions` component in `content()`. The
+     * renderers run such buttons as field actions of the `infolist` schema when they
+     * are not inside a form, and this page has no infolist: resolve that name to the
+     * content so the buttons work from the browser.
+     */
+    public function getSchema(string $name): ?Schema
+    {
+        if ($name === 'infolist') {
+            return $this->getContentSchema();
+        }
+
+        return parent::getSchema($name);
+    }
+
     public function content(Schema $schema): Schema
     {
         $invitation = $this->getInvitation();
