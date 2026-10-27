@@ -429,7 +429,7 @@ class TeamsPlugin implements Plugin
 
     public function canCreateTeams(): bool
     {
-        return (bool) $this->evaluate($this->canCreateTeams);
+        return $this->evaluateUserAuthorization($this->canCreateTeams);
     }
 
     // ---------------------------------------------------------------- Invitations
