@@ -26,7 +26,7 @@
   },
   "require": {
     "php": "^8.4",
-    "alfasix/alfakit": "^0.1|@dev"
+    "alfasix/alfakit": "^0.2|@dev"
   },
   "suggest": {
     "alfasix/alfakit-billing": "Per-team subscriptions: derive seats from the plan and sync the subscription quantity.",
@@ -49,7 +49,7 @@
       ]
     },
     "alfakit": {
-      "version": "^0.1",
+      "version": "^0.2",
       "frontend": null,
       "showcase": {
         "demoPath": "staff",
