@@ -9,6 +9,7 @@ use AlfaSix\Alfakit\Navigation\SubNavigationPosition;
 use AlfaSix\Alfakit\Notifications\Notification;
 use AlfaSix\Alfakit\Pages\Page;
 use AlfaSix\Alfakit\Support\Enums\Color;
+use AlfaSix\Alfakit\Support\SearchQuery;
 use AlfaSix\Alfakit\Tables\Columns\ImageColumn;
 use AlfaSix\Alfakit\Tables\Columns\TextColumn;
 use AlfaSix\Alfakit\Tables\Filters\SelectFilter;
@@ -131,9 +132,10 @@ class TeamMembers extends Page
                     ->weight('medium')
                     ->formatStateUsing(static fn (mixed $state, Membership $record): string => (string) $state.((string) $record->user_id === (string) $me->getKey() ? ' '.__('alfakit-teams::teams.members.you') : ''))
                     ->description(static fn (Membership $record): ?string => $record->user?->getAttribute('email'))
-                    ->searchable(query: static fn (Builder $query, string $search): Builder => $query->whereHas('user', static fn (Builder $query) => $query
-                        ->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%"))),
+                    ->searchable(query: static fn (Builder $query, string $search): Builder => $query->whereHas('user', static function (Builder $query) use ($search): void {
+                        SearchQuery::contains($query, $query->qualifyColumn('name'), $search);
+                        SearchQuery::contains($query, $query->qualifyColumn('email'), $search, or: true);
+                    })),
                 TextColumn::make('role')
                     ->label(__('alfakit-teams::teams.fields.role'))
                     ->badge()

@@ -607,7 +607,7 @@ class TeamManager
 
     /**
      * Add the user to every team whose auto-join domain is their e-mail domain (verified
-     * addresses only when the user model verifies e-mail). Teams without a free seat are
+     * addresses only, see `hasVerifiedEmail()`). Teams without a free seat are
      * skipped. Returns the teams joined.
      *
      * @return array<int, Model>
@@ -621,7 +621,9 @@ class TeamManager
             return [];
         }
 
-        if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+        // Anyone can sign up with an address of a domain they don't own: only a verified
+        // address proves the domain.
+        if (! $this->hasVerifiedEmail($user)) {
             return [];
         }
 
@@ -650,6 +652,18 @@ class TeamManager
     }
 
     /**
+     * Whether the user's e-mail address was verified: `hasVerifiedEmail()` on models that
+     * implement `MustVerifyEmail`, otherwise a filled `email_verified_at` (set it yourself
+     * when another system, such as single sign-on, verified the address).
+     */
+    public function hasVerifiedEmail(Model $user): bool
+    {
+        return $user instanceof MustVerifyEmail
+            ? $user->hasVerifiedEmail()
+            : $user->getAttribute('email_verified_at') !== null;
+    }
+
+    /**
      * Why `$domain` can't be the auto-join domain of a team set by `$actor` (a
      * `TeamException` reason), or null when it can: it must not be a public e-mail
      * provider, and it must be the actor's own (verified) e-mail domain.
@@ -673,7 +687,7 @@ class TeamManager
         $email = $this->emailOf($actor);
         $ownDomain = $email === null ? null : $this->normalizeDomain(Str::afterLast($email, '@'));
 
-        if ($ownDomain !== $domain || ($actor instanceof MustVerifyEmail && ! $actor->hasVerifiedEmail())) {
+        if ($ownDomain !== $domain || ! $this->hasVerifiedEmail($actor)) {
             return 'domain_not_yours';
         }
 

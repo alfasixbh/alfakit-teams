@@ -365,6 +365,24 @@ describe('domain auto-join', function (): void {
             ->and($grace->teams()->where('slug', 'other')->exists())->toBeFalse();
     });
 
+    it('never joins an address nobody verified, also on user models that do not verify e-mail', function (): void {
+        $ada = user('Ada', 'ada@acme.test');
+        $team = team($ada, 'Acme');
+        $team->forceFill(['auto_join_domain' => 'acme.test'])->save();
+
+        // Anyone can register as someone@acme.test without owning the mailbox.
+        $mallory = user('Mallory', 'mallory@acme.test', verified: false);
+        event(new Registered($mallory));
+
+        expect($mallory->teamRole($team))->toBeNull()
+            ->and(Teams::manager()->autoJoin($mallory))->toBe([]);
+
+        // Verified by another system (single sign-on): `email_verified_at` is filled.
+        $mallory->forceFill(['email_verified_at' => now()])->save();
+
+        expect(Teams::manager()->autoJoin($mallory))->toHaveCount(1);
+    });
+
     it('waits for e-mail verification on users that verify e-mail', function (): void {
         config()->set('auth.providers.users.model', VerifyingTeamsUser::class);
         $ada = user('Ada', 'ada@acme.test');
